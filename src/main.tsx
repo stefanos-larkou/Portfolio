@@ -16,7 +16,7 @@ if (!root) {
 
 createRoot(root).render(
     <StrictMode>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme} defaultMode="system" noSsr>
             <CssBaseline />
             <BrowserRouter>
                 <App />
