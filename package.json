@@ -1,11 +1,11 @@
 {
     "name": "portfolio",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
     "type": "module",
     "scripts": {
         "start": "npm run dev",
-        "test": "vitest run --passWithNoTests",
+        "test": "vitest run",
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
