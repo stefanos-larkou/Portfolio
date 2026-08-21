@@ -1,14 +1,14 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
+import { PAGES } from "./core/pages";
 
-const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 export function AppRoutes() {
     return (
         <Suspense fallback={null}>
             <Routes>
-                <Route path="/" element={<Home />} />
+                {PAGES.map(page => <Route key={page.path} path={page.path} element={<page.element />} />)}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </Suspense>
