@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "start": "npm run dev",
+        "check": "npm run lint && npm test && npm run build",
         "test": "vitest run",
         "dev": "vite",
         "build": "tsc -b && vite build",
