@@ -1,9 +1,15 @@
-import { Container, Stack, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router";
+import { Container, Link, Stack, Typography } from "@mui/material";
 
 export default function Home() {
     return (
         <Container maxWidth="md" sx={{ py: { xs: 6, md: 10 } }}>
             <Stack spacing={2}>
+                <title>Stefanos Larkou</title>
+                <Link component={RouterLink} to="/find-my-way">
+                    Find My Way
+                </Link>
+
                 <Typography variant="overline" color="text.secondary">
                     Placeholder Title
                 </Typography>

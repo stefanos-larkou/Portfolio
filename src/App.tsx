@@ -1,14 +1,72 @@
-import { Box } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CloseIcon from "@mui/icons-material/Close";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { Suspense, useState } from "react";
+import { Link as RouterLink, useLocation } from "react-router";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { PAGES } from "./core/pages";
 import { AppRoutes } from "./routes";
 
 export function App() {
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const { pathname } = useLocation();
+    const [informing, setInforming] = useState(false);
+    const page = PAGES.find(candidate => candidate.path === pathname);
+    const Info = page?.info;
+
     return (
-        <>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
-                <ThemeToggle />
+        <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
+            {page && <title>{page.title}</title>}
+            <Stack direction="row" sx={{ alignItems: "center", gap: 1, px: 4, py: 2, flex: "0 0 auto" }}>
+                {page?.heading && (
+                    <Tooltip title="Back to the home page" placement="bottom">
+                        <IconButton component={RouterLink} to="/" aria-label="Back to the home page" sx={{ ml: -1 }}>
+                            <ArrowBackIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+                {page?.heading && <Typography variant="h4" component="h1">{page.heading}</Typography>}
+                {Info && (
+                    <Tooltip title={`About ${page?.heading}`} placement="bottom">
+                        <IconButton onClick={() => setInforming(true)} aria-label={`About ${page?.heading}`}>
+                            <InfoOutlinedIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+                <Box sx={{ ml: "auto" }}>
+                    <ThemeToggle />
+                </Box>
+            </Stack>
+            <Box sx={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+                <AppRoutes />
             </Box>
-            <AppRoutes />
-        </>
+            <Dialog
+                open={informing && Boolean(Info)}
+                onClose={() => setInforming(false)}
+                fullScreen={fullScreen}
+                maxWidth="sm"
+                fullWidth
+                scroll="paper"
+            >
+                <DialogTitle sx={{ pr: 7 }}>
+                    {page?.heading}
+                    <IconButton
+                        onClick={() => setInforming(false)}
+                        aria-label="Close"
+                        sx={{ position: "absolute", right: 8, top: 8 }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Suspense fallback={null}>
+                        {Info && <Info />}
+                    </Suspense>
+                </DialogContent>
+            </Dialog>
+        </Box>
     );
 }
