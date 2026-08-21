@@ -16,6 +16,7 @@ export function App() {
     const [informing, setInforming] = useState(false);
     const page = PAGES.find(candidate => candidate.path === pathname);
     const Info = page?.info;
+    const accent = page?.accent;
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
@@ -51,12 +52,12 @@ export function App() {
                 fullWidth
                 scroll="paper"
             >
-                <DialogTitle sx={{ pr: 7 }}>
+                <DialogTitle sx={{ position: "relative", pr: 7, background: accent, color: accent ? "common.white" : undefined }}>
                     {page?.heading}
                     <IconButton
                         onClick={() => setInforming(false)}
                         aria-label="Close"
-                        sx={{ position: "absolute", right: 8, top: 8 }}
+                        sx={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", color: "inherit" }}
                     >
                         <CloseIcon />
                     </IconButton>
