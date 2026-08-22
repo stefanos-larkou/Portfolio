@@ -21,6 +21,7 @@ export function App() {
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
             {page && <title>{page.title}</title>}
+            {page?.icon && <link rel="icon" type="image/svg+xml" href={page.icon} />}
             <Stack direction="row" sx={{ alignItems: "center", gap: 1, px: 4, py: 2, flex: "0 0 auto" }}>
                 {page?.heading && (
                     <Tooltip title="Back to the home page" placement="bottom">

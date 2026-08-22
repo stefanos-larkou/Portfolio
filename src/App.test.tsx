@@ -30,4 +30,16 @@ describe("App", () => {
         await userEvent.click(screen.getByRole("button", { name: "Close" }));
         await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     });
+
+    it("marks the tab with the project's own icon", async () => {
+        renderWithProviders(<App />, ["/find-my-way"]);
+        await screen.findByRole("heading", { level: 1, name: "Find My Way" });
+        await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/find-my-way.svg"));
+    });
+
+    it("leaves the tab icon alone on a page without one", async () => {
+        renderWithProviders(<App />);
+        await screen.findByRole("heading", { level: 1, name: "Stefanos Larkou" });
+        expect(document.head.querySelector("link[rel='icon']")).not.toBeInTheDocument();
+    });
 });

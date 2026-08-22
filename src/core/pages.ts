@@ -8,6 +8,7 @@ export interface Page {
     heading?: string;
     info?: LazyExoticComponent<ComponentType>;
     accent?: string;
+    icon?: string;
 }
 
 export const PAGES: Page[] = [
@@ -22,6 +23,7 @@ export const PAGES: Page[] = [
         heading: "Find My Way",
         element: lazy(() => import("../pages/FindMyWay")),
         info: lazy(() => import("../components/AboutFindMyWay")),
-        accent: "linear-gradient(90deg, #0e9f6e, #d6337f)"
+        accent: "linear-gradient(90deg, #0e9f6e, #d6337f)",
+        icon: "/find-my-way.svg"
     }
 ];
