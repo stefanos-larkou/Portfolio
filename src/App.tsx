@@ -7,7 +7,12 @@ import { Suspense, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { PAGES } from "./core/pages";
+import { useFavicon } from "./hooks/useFavicon";
 import { AppRoutes } from "./routes";
+
+const SITE_ICON = "/icon.svg";
+const TITLE_PREFIX = "SL | ";
+const HOME = "/";
 
 export function App() {
     const theme = useTheme();
@@ -18,10 +23,11 @@ export function App() {
     const Info = page?.info;
     const accent = page?.accent;
 
+    useFavicon(page?.icon ?? SITE_ICON);
+
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
-            {page && <title>{page.title}</title>}
-            {page?.icon && <link rel="icon" type="image/svg+xml" href={page.icon} />}
+            {page && <title>{page.path === HOME ? page.title : `${TITLE_PREFIX}${page.title}`}</title>}
             <Stack direction="row" sx={{ alignItems: "center", gap: 1, px: 4, py: 2, flex: "0 0 auto" }}>
                 {page?.heading && (
                     <Tooltip title="Back to the home page" placement="bottom">

@@ -31,15 +31,36 @@ describe("App", () => {
         await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     });
 
+    it("puts the site's initials before a project's name in the tab", async () => {
+        renderWithProviders(<App />, ["/find-my-way"]);
+        await screen.findByRole("heading", { level: 1, name: "Find My Way" });
+        await waitFor(() => expect(document.title).toBe("SL | Find My Way"));
+    });
+
+    it("leaves the home page's tab under its own name", async () => {
+        renderWithProviders(<App />);
+        await screen.findByRole("heading", { level: 1, name: "Stefanos Larkou" });
+        await waitFor(() => expect(document.title).toBe("Stefanos Larkou"));
+    });
+
     it("marks the tab with the project's own icon", async () => {
         renderWithProviders(<App />, ["/find-my-way"]);
         await screen.findByRole("heading", { level: 1, name: "Find My Way" });
         await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/find-my-way.svg"));
     });
 
-    it("leaves the tab icon alone on a page without one", async () => {
+    it("falls back to the site's own icon on a page without one", async () => {
         renderWithProviders(<App />);
         await screen.findByRole("heading", { level: 1, name: "Stefanos Larkou" });
-        expect(document.head.querySelector("link[rel='icon']")).not.toBeInTheDocument();
+        await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/icon.svg"));
+    });
+
+    it("puts the site's icon back when a project page is left", async () => {
+        renderWithProviders(<App />, ["/find-my-way"]);
+        await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/find-my-way.svg"));
+
+        await userEvent.click(screen.getByRole("link", { name: "Back to the home page" }));
+
+        await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/icon.svg"));
     });
 });

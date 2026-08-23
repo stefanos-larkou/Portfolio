@@ -8,7 +8,6 @@ export default function Home() {
             <HomeBackdrop />
             <Container maxWidth="md" sx={{ py: { xs: 6, md: 10 } }}>
                 <Stack spacing={2}>
-                    <title>Stefanos Larkou</title>
                     <Link component={RouterLink} to="/find-my-way">
                         Find My Way
                     </Link>
