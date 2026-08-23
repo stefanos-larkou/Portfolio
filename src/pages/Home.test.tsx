@@ -1,12 +1,28 @@
 import { screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./Home";
 import { PAGES } from "../core/pages";
 import { renderWithProviders } from "../test-utils";
 
 const PROJECTS = PAGES.filter(page => page.heading);
 
+function settled() {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+        matches: query.includes("prefers-reduced-motion"),
+        media: query,
+        onchange: null,
+        addListener: () => { },
+        removeListener: () => { },
+        addEventListener: () => { },
+        removeEventListener: () => { },
+        dispatchEvent: () => false
+    }));
+}
+
 describe("Home", () => {
+    beforeEach(settled);
+    afterEach(() => vi.unstubAllGlobals());
+
     it("offers a way into every project in the registry", () => {
         renderWithProviders(<Home />);
         PROJECTS.forEach(project => {
