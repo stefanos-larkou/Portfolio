@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { boardFor, halfExtent, planRun, travelFrom } from "./drift";
+import { boardFor, halfExtent, planRun, planShow, travelFrom } from "./drift";
 import type { Point } from "./drift";
 
 const VIEWPORT: Point = { x: 1920, y: 1080 };
@@ -31,6 +31,28 @@ describe("planRun", () => {
             return travelled + 0.5 < travelFrom(run.from, run.angle + 180, VIEWPORT, halfExtent(run.size, run.angle));
         });
         expect(shortchanged).toEqual([]);
+    });
+});
+
+describe("planShow", () => {
+    const shows = Array.from({ length: SAMPLE }, () => planShow(Math.random));
+
+    it("puts on both kinds of show", () => {
+        expect(shows.some(show => show.kind === "search")).toBe(true);
+        expect(shows.some(show => show.kind === "walk")).toBe(true);
+    });
+
+    it("gives every show a while to run", () => {
+        expect(shows.filter(show => !(show.seconds > 0))).toEqual([]);
+    });
+
+    it("keeps a walk flat, so the home page never reaches for WebGL", () => {
+        const walks = shows.filter(show => show.kind === "walk");
+        expect(walks.filter(walk => walk.dimensions !== 2)).toEqual([]);
+    });
+
+    it("varies what it asks for rather than repeating one show", () => {
+        expect(new Set(shows.map(show => show.seed)).size).toBeGreaterThan(SAMPLE / 2);
     });
 });
 

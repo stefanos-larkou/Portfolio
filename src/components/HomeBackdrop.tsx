@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
 import { AutoSearch } from "@stefanos-larkou/find-my-way";
+import { AutoWalk } from "@stefanos-larkou/rwalk";
 import { useCallback, useEffect, useState } from "react";
 import type { TransitionEvent } from "react";
 import { planRun } from "../core/drift";
+import type { Show as Subject } from "../core/drift";
 import { useViewport } from "../hooks/useViewport";
 
-const OPACITY = 0.35;
+const OPACITY = { search: 0.35, walk: 0.55 };
 const FADE = 1.6;
 const BLUR = 3;
 
@@ -40,22 +42,41 @@ export function HomeBackdrop() {
                     top: 0,
                     width: run.size,
                     height: run.size,
-                    opacity: arrived && !leaving ? OPACITY : 0,
+                    opacity: arrived && !leaving ? OPACITY[run.show.kind] : 0,
                     transform: `translate(${at.x - run.size / 2}px, ${at.y - run.size / 2}px) rotate(${run.angle}deg)`,
-                    transition: `transform ${run.seconds}s linear, opacity ${FADE}s ease`
+                    transition: `transform ${run.show.seconds}s linear, opacity ${FADE}s ease`
                 }}
             >
-                <AutoSearch
-                    key={run.key}
-                    seed={run.seed}
-                    cellCount={run.cellCount}
-                    complexity={run.complexity}
-                    speed={run.speed}
-                    algorithm={run.algorithm}
-                    terrain={run.terrain}
-                    onFinished={() => setLeaving(true)}
-                />
+                <Show key={run.key} show={run.show} onFinished={() => setLeaving(true)} />
             </Box>
         </Box>
+    );
+}
+
+function Show({ show, onFinished }: { show: Subject; onFinished: () => void; }) {
+    if (show.kind === "walk") {
+        return (
+            <AutoWalk
+                seed={show.seed}
+                dimensions={show.dimensions}
+                walkers={show.walkers}
+                steps={show.steps}
+                speed={show.speed}
+                diagonals={show.diagonals}
+                onFinished={onFinished}
+            />
+        );
+    }
+
+    return (
+        <AutoSearch
+            seed={show.seed}
+            cellCount={show.cellCount}
+            complexity={show.complexity}
+            speed={show.speed}
+            algorithm={show.algorithm}
+            terrain={show.terrain}
+            onFinished={onFinished}
+        />
     );
 }

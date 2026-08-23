@@ -4,7 +4,7 @@ import { HomeBackdrop } from "./HomeBackdrop";
 import { renderWithProviders } from "../test-utils";
 
 describe("HomeBackdrop", () => {
-    it("runs a search behind the page", () => {
+    it("runs something behind the page", () => {
         const { container } = renderWithProviders(<HomeBackdrop />);
         expect(container.querySelector("canvas")).toBeInTheDocument();
     });

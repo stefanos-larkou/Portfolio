@@ -7,34 +7,63 @@ const MIN_CELLS = 150;
 const MAX_CELLS = 300;
 const MIN_SPEED = 20;
 const MAX_SPEED = 40;
+const MIN_STEPS = 600;
+const MAX_STEPS = 1600;
+const MIN_WALK_SPEED = 100;
+const MAX_WALK_SPEED = 220;
+const MIN_WALKERS = 8;
+const MAX_WALKERS = 20;
+const EITHER = 0.5;
+const FLAT = 2;
 
 export interface Point {
     x: number;
     y: number;
 }
 
-export interface Run {
-    key: number;
+export interface Search {
+    kind: "search";
+    seconds: number;
     seed: number;
     algorithm: AlgorithmName;
     cellCount: number;
     complexity: number;
     speed: number;
     terrain: boolean;
+}
+
+export interface Walk {
+    kind: "walk";
+    seconds: number;
+    seed: number;
+    dimensions: number;
+    walkers: number;
+    steps: number;
+    speed: number;
+    diagonals: boolean;
+}
+
+export type Show = Search | Walk;
+
+export interface Run {
+    key: number;
+    show: Show;
     size: number;
     angle: number;
     from: Point;
     to: Point;
-    seconds: number;
 }
 
 export function boardFor(viewport: Point): number {
     return Math.max(Math.min(viewport.x, viewport.y) * BOARD_SHARE, MIN_BOARD);
 }
 
+export function planShow(random: () => number): Show {
+    return random() < EITHER ? searchShow(random) : walkShow(random);
+}
+
 export function planRun(key: number, viewport: Point, random: () => number): Run {
-    const cellCount = Math.round(between(MIN_CELLS, MAX_CELLS, random()));
-    const speed = between(MIN_SPEED, MAX_SPEED, random());
+    const show = planShow(random);
     const size = boardFor(viewport);
     const angle = random() * 360;
     const margin = halfExtent(size, angle);
@@ -44,20 +73,43 @@ export function planRun(key: number, viewport: Point, random: () => number): Run
     };
     const heading = furthestHeading(from, angle, viewport, margin);
 
+    return { key, show, size, angle: heading.angle, from, to: heading.to };
+}
+
+function searchShow(random: () => number): Search {
+    const cellCount = Math.round(between(MIN_CELLS, MAX_CELLS, random()));
+    const speed = between(MIN_SPEED, MAX_SPEED, random());
+
     return {
-        key,
-        seed: Math.floor(random() * 1_000_000),
+        kind: "search",
+        seconds: cellCount / speed,
+        seed: seedFrom(random),
         algorithm: ALGORITHM_NAMES[Math.floor(random() * ALGORITHM_NAMES.length)] ?? "a-star",
         cellCount,
         complexity: between(0.3, 0.9, random()),
         speed,
-        terrain: random() < 0.5,
-        size,
-        angle: heading.angle,
-        from,
-        to: heading.to,
-        seconds: cellCount / speed
+        terrain: random() < EITHER
     };
+}
+
+function walkShow(random: () => number): Walk {
+    const steps = Math.round(between(MIN_STEPS, MAX_STEPS, random()));
+    const speed = between(MIN_WALK_SPEED, MAX_WALK_SPEED, random());
+
+    return {
+        kind: "walk",
+        seconds: steps / speed,
+        seed: seedFrom(random),
+        dimensions: FLAT,
+        walkers: Math.round(between(MIN_WALKERS, MAX_WALKERS, random())),
+        steps,
+        speed,
+        diagonals: random() < EITHER
+    };
+}
+
+function seedFrom(random: () => number): number {
+    return Math.floor(random() * 1_000_000);
 }
 
 export function halfExtent(size: number, angle: number): number {
