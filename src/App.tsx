@@ -6,12 +6,11 @@ import { useTheme } from "@mui/material/styles";
 import { Suspense, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router";
 import { ThemeToggle } from "./components/ThemeToggle";
-import { PAGES } from "./core/pages";
+import { PAGES, TITLE_PREFIX } from "./core/pages";
 import { useFavicon } from "./hooks/useFavicon";
 import { AppRoutes } from "./routes";
 
 const SITE_ICON = "/icon.svg";
-const TITLE_PREFIX = "SL | ";
 const HOME = "/";
 
 export function App() {

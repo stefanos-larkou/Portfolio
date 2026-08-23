@@ -13,6 +13,8 @@ export interface Page {
     icon?: string;
 }
 
+export const TITLE_PREFIX = "SL | ";
+
 export const PAGES: Page[] = [
     {
         path: "/",
