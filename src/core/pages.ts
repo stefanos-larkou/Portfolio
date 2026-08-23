@@ -25,5 +25,14 @@ export const PAGES: Page[] = [
         info: lazy(() => import("../components/AboutFindMyWay")),
         accent: "linear-gradient(90deg, #0e9f6e, #d6337f)",
         icon: "/find-my-way.svg"
+    },
+    {
+        path: "/random-walks",
+        title: "Random Walks",
+        heading: "Random Walks",
+        element: lazy(() => import("../pages/RandomWalks")),
+        info: lazy(() => import("../components/AboutRandomWalks")),
+        accent: "linear-gradient(90deg, #2f7fd6, #e08a2e)",
+        icon: "/random-walks.svg"
     }
 ];

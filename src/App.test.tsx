@@ -2,6 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { App } from "./App";
+import { PAGES } from "./core/pages";
 import { renderWithProviders } from "./test-utils";
 
 describe("App", () => {
@@ -31,6 +32,16 @@ describe("App", () => {
         await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     });
 
+    it("gives every project in the registry a page of its own", async () => {
+        const projects = PAGES.filter(page => page.heading);
+        for (const project of projects) {
+            const { unmount } = renderWithProviders(<App />, [project.path]);
+            await screen.findByRole("heading", { level: 1, name: project.heading });
+            unmount();
+        }
+        expect(projects.length).toBeGreaterThan(1);
+    });
+
     it("puts the site's initials before a project's name in the tab", async () => {
         renderWithProviders(<App />, ["/find-my-way"]);
         await screen.findByRole("heading", { level: 1, name: "Find My Way" });
@@ -58,9 +69,7 @@ describe("App", () => {
     it("puts the site's icon back when a project page is left", async () => {
         renderWithProviders(<App />, ["/find-my-way"]);
         await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/find-my-way.svg"));
-
         await userEvent.click(screen.getByRole("link", { name: "Back to the home page" }));
-
         await waitFor(() => expect(document.head.querySelector("link[rel='icon']")).toHaveAttribute("href", "/icon.svg"));
     });
 });

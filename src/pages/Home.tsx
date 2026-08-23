@@ -11,6 +11,9 @@ export default function Home() {
                     <Link component={RouterLink} to="/find-my-way">
                         Find My Way
                     </Link>
+                    <Link component={RouterLink} to="/random-walks">
+                        Random Walks
+                    </Link>
 
                     <Typography variant="overline" color="text.secondary">
                         Placeholder Title
