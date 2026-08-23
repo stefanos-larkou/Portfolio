@@ -27,7 +27,9 @@ export function App() {
 
     useFavicon(page?.icon ?? SITE_ICON);
 
-    useEffect(() => window.scrollTo({ top: 0 }), [pathname]);
+    useEffect(() => {
+        window.scrollTo({ top: 0 });
+    }, [pathname]);
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100svh" }}>
