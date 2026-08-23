@@ -8,6 +8,7 @@ import type { Stage } from "../components/Intro";
 import { PAGES } from "../core/pages";
 import type { Page } from "../core/pages";
 import { STILL } from "../core/preview";
+import { glass } from "../core/surfaces";
 
 const PROJECTS = PAGES.filter(page => page.heading);
 
@@ -87,9 +88,7 @@ export default function Home() {
                         borderColor: "brand.soft",
                         borderTopLeftRadius: theme.spacing(PANEL_RADIUS),
                         borderTopRightRadius: theme.spacing(PANEL_RADIUS),
-                        backgroundColor: "rgba(255, 255, 255, 0.72)",
-                        backdropFilter: "blur(20px)",
-                        ...theme.applyStyles("dark", { backgroundColor: "rgba(16, 17, 20, 0.72)" })
+                        ...glass(theme)
                     })}
                 >
                     <Container maxWidth="md" sx={{ py: { xs: 5, md: 7 } }}>

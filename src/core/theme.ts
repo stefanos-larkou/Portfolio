@@ -34,6 +34,10 @@ export const theme = createTheme({
         light: {
             palette: {
                 primary: { main: "#1f6feb" },
+                background: {
+                    default: "#f5f4fa",
+                    paper: "#ffffff"
+                },
                 themeIcon: {
                     main: "#0a6f88",
                     hover: "rgba(10, 111, 136, 0.12)"
@@ -47,6 +51,10 @@ export const theme = createTheme({
         dark: {
             palette: {
                 primary: { main: "#589dff" },
+                background: {
+                    default: "#110f16",
+                    paper: "#1a1722"
+                },
                 themeIcon: {
                     main: "#fbbf24",
                     hover: "rgba(251, 191, 36, 0.12)"
