@@ -26,9 +26,11 @@ const BIO_WIDTH = "65ch";
 const PANEL_RADIUS = 6;
 const PREVIEW_HEIGHT = { xs: 200, sm: 240 };
 
+let introduced = false;
+
 export default function Home() {
     const still = useMediaQuery(STILL);
-    const [stage, setStage] = useState<Stage>(still ? "done" : "typing");
+    const [stage, setStage] = useState<Stage>(still || introduced ? "done" : "typing");
     const nameRef = useRef<HTMLHeadingElement>(null);
 
     const arrived = stage !== "typing";
@@ -42,7 +44,10 @@ export default function Home() {
                     stage={stage}
                     lands={nameRef}
                     onTyped={() => setStage("settling")}
-                    onLanded={() => setStage("done")}
+                    onLanded={() => {
+                        introduced = true;
+                        setStage("done");
+                    }}
                 />
             )}
             <HomeBackdrop />
