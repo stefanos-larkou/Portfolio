@@ -52,7 +52,7 @@ export default function Home() {
             )}
             <HomeBackdrop />
             <Box sx={{ position: "relative", zIndex: 1 }}>
-                <Box sx={{ position: "sticky", top: 0, display: "flex", alignItems: "center", minHeight: "72dvh" }}>
+                <Box sx={{ position: "sticky", top: 0, display: "flex", alignItems: "center", minHeight: "72svh" }}>
                     <Container maxWidth="md" sx={{ py: { xs: 6, md: 8 }, display: "flex", justifyContent: "center" }}>
                         <Stack spacing={3} sx={{ width: "100%", maxWidth: BIO_WIDTH, textAlign: "start" }}>
                             <Fade in={arrived} timeout={SETTLE_MS}>
@@ -88,7 +88,7 @@ export default function Home() {
                 <Box
                     sx={theme => ({
                         position: "relative",
-                        minHeight: "100dvh",
+                        minHeight: "100svh",
                         borderTop: "2px solid",
                         borderColor: "brand.soft",
                         borderTopLeftRadius: theme.spacing(PANEL_RADIUS),

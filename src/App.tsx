@@ -1,12 +1,13 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Tooltip, Typography, useMediaQuery, useScrollTrigger } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { PAGES, TITLE_PREFIX } from "./core/pages";
+import { glass } from "./core/surfaces";
 import { useFavicon } from "./hooks/useFavicon";
 import { AppRoutes } from "./routes";
 
@@ -22,12 +23,32 @@ export function App() {
     const Info = page?.info;
     const accent = page?.accent;
 
+    const buried = useScrollTrigger();
+
     useFavicon(page?.icon ?? SITE_ICON);
 
+    useEffect(() => window.scrollTo({ top: 0 }), [pathname]);
+
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100dvh" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100svh" }}>
             {page && <title>{page.path === HOME ? page.title : `${TITLE_PREFIX}${page.title}`}</title>}
-            <Stack direction="row" sx={{ alignItems: "center", gap: 1, px: 4, py: 2, flex: "0 0 auto" }}>
+            <Stack
+                direction="row"
+                sx={theme => ({
+                    alignItems: "center",
+                    gap: 1,
+                    px: 4,
+                    py: 2,
+                    flex: "0 0 auto",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: theme.zIndex.appBar,
+                    ...glass(theme),
+                    transform: buried ? "translateY(-100%)" : "none",
+                    transition: "transform 240ms ease",
+                    "@media (prefers-reduced-motion: reduce)": { transition: "none" }
+                })}
+            >
                 {page?.heading && (
                     <Tooltip title="Back to the home page" placement="bottom">
                         <IconButton component={RouterLink} to="/" aria-label="Back to the home page" sx={{ ml: -1 }}>

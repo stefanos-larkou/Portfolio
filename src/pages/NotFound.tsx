@@ -32,7 +32,7 @@ export default function NotFound() {
                     alignItems: "center",
                     justifyContent: "center",
                     flex: 1,
-                    minHeight: "72dvh"
+                    minHeight: "72svh"
                 }}
             >
                 <Container maxWidth="sm" sx={{ py: { xs: 6, md: 8 } }}>
