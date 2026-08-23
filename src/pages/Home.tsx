@@ -1,33 +1,123 @@
+import { Box, Chip, Container, Stack, Typography } from "@mui/material";
+import { Suspense } from "react";
 import { Link as RouterLink } from "react-router";
-import { Container, Link, Stack, Typography } from "@mui/material";
+import { ContactLinks } from "../components/ContactLinks";
 import { HomeBackdrop } from "../components/HomeBackdrop";
 import { PAGES } from "../core/pages";
+import type { Page } from "../core/pages";
 
 const PROJECTS = PAGES.filter(page => page.heading);
+
+const NAME = "Stefanos Larkou";
+const ROLE = "Software engineer";
+
+const ABOUT = "I build web applications end to end, from the interface down to the database. My "
+    + "background is in computer science, scientific computing, and data analysis. Below are a few "
+    + "interactive projects that are easier to follow by watching them run than by reading about them, "
+    + "the rest of what I build is on GitHub.";
+
+const TECHNOLOGIES = ["TypeScript", "React", "Angular", "C#", ".NET", "Azure", "SQL", "Python"];
+
+const BIO_WIDTH = "65ch";
+const PANEL_RADIUS = 6;
+const PREVIEW_HEIGHT = { xs: 200, sm: 240 };
 
 export default function Home() {
     return (
         <>
             <HomeBackdrop />
-            <Container maxWidth="md" sx={{ py: { xs: 6, md: 10 } }}>
-                <Stack spacing={2}>
-                    {PROJECTS.map(project => (
-                        <Link key={project.path} component={RouterLink} to={project.path}>
-                            {project.heading}
-                        </Link>
-                    ))}
+            <Box sx={{ position: "relative", zIndex: 1 }}>
+                <Box sx={{ position: "sticky", top: 0, display: "flex", alignItems: "center", minHeight: "72dvh" }}>
+                    <Container maxWidth="md" sx={{ py: { xs: 6, md: 8 }, display: "flex", justifyContent: "center" }}>
+                        <Stack spacing={3} sx={{ width: "100%", maxWidth: BIO_WIDTH, textAlign: "start" }}>
+                            <Typography variant="overline" color="text.secondary">{ROLE}</Typography>
+                            <Typography variant="h1">{NAME}</Typography>
+                            <Typography variant="body1" color="text.secondary">{ABOUT}</Typography>
+                            <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
+                                {TECHNOLOGIES.map(name => (
+                                    <Chip
+                                        key={name}
+                                        label={name}
+                                        variant="outlined"
+                                        sx={{ borderColor: "brand.soft" }}
+                                    />
+                                ))}
+                            </Stack>
+                            <ContactLinks />
+                        </Stack>
+                    </Container>
+                </Box>
 
-                    <Typography variant="overline" color="text.secondary">
-                        Placeholder Title
-                    </Typography>
-                    <Typography variant="h1">
-                        Stefanos Larkou
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        Placeholder text.
-                    </Typography>
-                </Stack>
-            </Container>
+                <Box
+                    sx={theme => ({
+                        position: "relative",
+                        minHeight: "100dvh",
+                        borderTop: "2px solid",
+                        borderColor: "brand.soft",
+                        borderTopLeftRadius: theme.spacing(PANEL_RADIUS),
+                        borderTopRightRadius: theme.spacing(PANEL_RADIUS),
+                        backgroundColor: "rgba(255, 255, 255, 0.72)",
+                        backdropFilter: "blur(20px)",
+                        ...theme.applyStyles("dark", { backgroundColor: "rgba(16, 17, 20, 0.72)" })
+                    })}
+                >
+                    <Container maxWidth="md" sx={{ py: { xs: 5, md: 7 } }}>
+                        <Stack spacing={4}>
+                            <Typography variant="h2">Projects</Typography>
+                            {PROJECTS.map(project => <Project key={project.path} project={project} />)}
+                        </Stack>
+                    </Container>
+                </Box>
+            </Box>
         </>
+    );
+}
+
+function Project({ project }: { project: Page; }) {
+    const Preview = project.preview;
+
+    return (
+        <Box
+            component={RouterLink}
+            to={project.path}
+            aria-label={project.heading}
+            sx={theme => ({
+                display: "grid",
+                gap: { xs: 2, sm: 3 },
+                gridTemplateColumns: { xs: "minmax(0, 1fr)", sm: "minmax(0, 5fr) minmax(0, 7fr)" },
+                alignItems: "center",
+                p: { xs: 2, sm: 2.5 },
+                borderRadius: theme.spacing(3),
+                border: "1px solid",
+                borderColor: "divider",
+                color: "inherit",
+                textDecoration: "none",
+                transition: "transform 200ms ease, border-color 200ms ease",
+                "&:hover": { transform: "translateY(-3px)", borderColor: "text.secondary" },
+                "@media (prefers-reduced-motion: reduce)": { transition: "none", "&:hover": { transform: "none" } }
+            })}
+        >
+            <Box
+                sx={theme => ({
+                    height: PREVIEW_HEIGHT,
+                    borderRadius: theme.spacing(2),
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "stretch",
+                    background: project.accent,
+                    "& > *": { flex: 1, minWidth: 0, minHeight: 0 },
+                    "& canvas": { maxWidth: "100%", maxHeight: "100%" }
+                })}
+            >
+                <Suspense fallback={null}>
+                    {Preview && <Preview />}
+                </Suspense>
+            </Box>
+
+            <Stack spacing={1}>
+                <Typography variant="h5" component="h3">{project.heading}</Typography>
+                <Typography variant="body2" color="text.secondary">{project.blurb}</Typography>
+            </Stack>
+        </Box>
     );
 }

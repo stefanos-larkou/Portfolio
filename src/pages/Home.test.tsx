@@ -15,8 +15,26 @@ describe("Home", () => {
         expect(PROJECTS.length).toBeGreaterThan(1);
     });
 
-    it("offers a way into nothing else", () => {
+    it("says what each project is, in the words its own page uses", () => {
         renderWithProviders(<Home />);
-        expect(screen.getAllByRole("link")).toHaveLength(PROJECTS.length);
+        PROJECTS.forEach(project => {
+            expect(project.blurb).toBeTruthy();
+            expect(screen.getByText(project.blurb as string)).toBeInTheDocument();
+        });
+    });
+
+    it("names the technologies", () => {
+        renderWithProviders(<Home />);
+        expect(screen.getByText("TypeScript")).toBeInTheDocument();
+        expect(screen.getByText("Python")).toBeInTheDocument();
+    });
+
+    it("goes nowhere inside the site that is not a registered project", () => {
+        renderWithProviders(<Home />);
+        const inside = screen.getAllByRole("link")
+            .map(link => link.getAttribute("href") ?? "")
+            .filter(href => href.startsWith("/"));
+
+        expect(inside.sort()).toEqual(PROJECTS.map(project => project.path).sort());
     });
 });

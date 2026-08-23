@@ -8,6 +8,7 @@ export interface Page {
     heading?: string;
     blurb?: string;
     info?: LazyExoticComponent<ComponentType>;
+    preview?: LazyExoticComponent<ComponentType>;
     accent?: string;
     icon?: string;
 }
@@ -27,6 +28,7 @@ export const PAGES: Page[] = [
             + "reaches the target hex, with a playback that replays every cell it considered on the way.",
         element: lazy(() => import("../pages/FindMyWay")),
         info: lazy(() => import("../components/AboutFindMyWay")),
+        preview: lazy(() => import("../components/FindMyWayPreview")),
         accent: "linear-gradient(90deg, #0e9f6e, #d6337f)",
         icon: "/find-my-way.svg"
     },
@@ -40,6 +42,7 @@ export const PAGES: Page[] = [
             + "measure what the walk does against what probability theory says it should.",
         element: lazy(() => import("../pages/RandomWalks")),
         info: lazy(() => import("../components/AboutRandomWalks")),
+        preview: lazy(() => import("../components/RandomWalksPreview")),
         accent: "linear-gradient(90deg, #2f7fd6, #e08a2e)",
         icon: "/random-walks.svg"
     }
