@@ -47,7 +47,7 @@ export function App() {
                     <ThemeToggle />
                 </Box>
             </Stack>
-            <Box sx={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", flex: 1, minHeight: { xs: "auto", md: 0 } }}>
                 <AppRoutes />
             </Box>
             <Dialog
