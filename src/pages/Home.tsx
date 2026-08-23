@@ -1,10 +1,13 @@
-import { Box, Chip, Container, Stack, Typography } from "@mui/material";
-import { Suspense } from "react";
+import { Box, Chip, Container, Fade, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Suspense, useRef, useState } from "react";
 import { Link as RouterLink } from "react-router";
 import { ContactLinks } from "../components/ContactLinks";
 import { HomeBackdrop } from "../components/HomeBackdrop";
+import { Intro, SETTLE_MS } from "../components/Intro";
+import type { Stage } from "../components/Intro";
 import { PAGES } from "../core/pages";
 import type { Page } from "../core/pages";
+import { STILL } from "../core/preview";
 
 const PROJECTS = PAGES.filter(page => page.heading);
 
@@ -23,27 +26,55 @@ const PANEL_RADIUS = 6;
 const PREVIEW_HEIGHT = { xs: 200, sm: 240 };
 
 export default function Home() {
+    const still = useMediaQuery(STILL);
+    const [stage, setStage] = useState<Stage>(still ? "done" : "typing");
+    const nameRef = useRef<HTMLHeadingElement>(null);
+
+    const arrived = stage !== "typing";
+    const landed = stage === "done";
+
     return (
         <>
+            {!landed && (
+                <Intro
+                    name={NAME}
+                    stage={stage}
+                    lands={nameRef}
+                    onTyped={() => setStage("settling")}
+                    onLanded={() => setStage("done")}
+                />
+            )}
             <HomeBackdrop />
             <Box sx={{ position: "relative", zIndex: 1 }}>
                 <Box sx={{ position: "sticky", top: 0, display: "flex", alignItems: "center", minHeight: "72dvh" }}>
                     <Container maxWidth="md" sx={{ py: { xs: 6, md: 8 }, display: "flex", justifyContent: "center" }}>
                         <Stack spacing={3} sx={{ width: "100%", maxWidth: BIO_WIDTH, textAlign: "start" }}>
-                            <Typography variant="overline" color="text.secondary">{ROLE}</Typography>
-                            <Typography variant="h1">{NAME}</Typography>
-                            <Typography variant="body1" color="text.secondary">{ABOUT}</Typography>
-                            <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
-                                {TECHNOLOGIES.map(name => (
-                                    <Chip
-                                        key={name}
-                                        label={name}
-                                        variant="outlined"
-                                        sx={{ borderColor: "brand.soft" }}
-                                    />
-                                ))}
-                            </Stack>
-                            <ContactLinks />
+                            <Fade in={arrived} timeout={SETTLE_MS}>
+                                <Typography variant="overline" color="text.secondary">{ROLE}</Typography>
+                            </Fade>
+                            <Typography variant="h1" ref={nameRef} sx={{ opacity: landed ? 1 : 0 }}>
+                                {NAME}
+                            </Typography>
+                            <Fade in={arrived} timeout={SETTLE_MS}>
+                                <Typography variant="body1" color="text.secondary">{ABOUT}</Typography>
+                            </Fade>
+                            <Fade in={arrived} timeout={SETTLE_MS} style={{ transitionDelay: `${SETTLE_MS / 4}ms` }}>
+                                <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
+                                    {TECHNOLOGIES.map(name => (
+                                        <Chip
+                                            key={name}
+                                            label={name}
+                                            variant="outlined"
+                                            sx={{ borderColor: "brand.soft" }}
+                                        />
+                                    ))}
+                                </Stack>
+                            </Fade>
+                            <Fade in={arrived} timeout={SETTLE_MS} style={{ transitionDelay: `${SETTLE_MS / 2}ms` }}>
+                                <Box>
+                                    <ContactLinks />
+                                </Box>
+                            </Fade>
                         </Stack>
                     </Container>
                 </Box>
