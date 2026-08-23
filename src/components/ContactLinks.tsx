@@ -43,7 +43,7 @@ export function ContactLinks() {
                         color: "text.secondary",
                         transition: "color 200ms ease",
                         "&:hover": { color: "brand.main" },
-                        "&:hover .contact-handle": { borderBottomColor: "brand.main" },
+                        "&:hover .contact-handle::after": { transform: "scaleX(1)" },
                         "@media (prefers-reduced-motion: reduce)": { transition: "none" }
                     }}
                 >
@@ -52,7 +52,22 @@ export function ContactLinks() {
                         className="contact-handle"
                         variant="body2"
                         component="span"
-                        sx={{ borderBottom: "1px solid", borderBottomColor: "brand.soft", transition: "border-color 200ms ease" }}
+                        sx={{
+                            position: "relative",
+                            "&::after": {
+                                content: "\"\"",
+                                position: "absolute",
+                                left: 0,
+                                right: 0,
+                                bottom: "-2px",
+                                height: "1px",
+                                backgroundColor: "brand.main",
+                                transform: "scaleX(0)",
+                                transformOrigin: "center",
+                                transition: "transform 220ms ease",
+                                "@media (prefers-reduced-motion: reduce)": { transition: "none" }
+                            }
+                        }}
                     >
                         {contact.handle}
                     </Typography>
