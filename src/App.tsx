@@ -70,9 +70,12 @@ export function App() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Suspense fallback={null}>
-                        {Info && <Info />}
-                    </Suspense>
+                    <Stack spacing={2}>
+                        {page?.blurb && <Typography variant="body1">{page.blurb}</Typography>}
+                        <Suspense fallback={null}>
+                            {Info && <Info />}
+                        </Suspense>
+                    </Stack>
                 </DialogContent>
             </Dialog>
         </Box>

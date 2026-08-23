@@ -1,10 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { GitHubLink } from "./GitHubLink";
 
-const INTRO = "A pathfinding visualiser on a hexagonal grid. Each map is a randomly generated "
-    + "irregular connected shape. A search begins at a root hex and works outwards until it reaches "
-    + "the target hex, with a playback that replays every cell it considered on the way.";
-
 const REPOSITORY = "https://github.com/stefanos-larkou/Find-My-Way";
 
 const SECTIONS = {
@@ -31,7 +27,6 @@ const EDITS = [
 export default function AboutFindMyWay() {
     return (
         <Stack spacing={2}>
-            <Typography variant="body1">{INTRO}</Typography>
             <Section title={SECTIONS.options} items={OPTIONS} />
             <Section title={SECTIONS.edits} items={EDITS} />
             <GitHubLink href={REPOSITORY} />

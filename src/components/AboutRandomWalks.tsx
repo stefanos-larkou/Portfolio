@@ -1,11 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { GitHubLink } from "./GitHubLink";
 
-const INTRO = "A random walk visualiser in one, two and three dimensions. A crowd of walkers starts "
-    + "at a shared origin and each one takes a step in a direction chosen at random, over and over. "
-    + "The playback replays every step, and the statistics run a far larger crowd to measure what "
-    + "the walk does against what probability theory says it should.";
-
 const REPOSITORY = "https://github.com/stefanos-larkou/RWalk";
 
 const SECTIONS = {
@@ -32,7 +27,6 @@ const CHARTS = [
 export default function AboutRandomWalks() {
     return (
         <Stack spacing={2}>
-            <Typography variant="body1">{INTRO}</Typography>
             <Section title={SECTIONS.options} items={OPTIONS} />
             <Section title={SECTIONS.charts} items={CHARTS} />
             <GitHubLink href={REPOSITORY} />
