@@ -5,13 +5,20 @@ interface ThemeIconPalette {
     hover: string;
 }
 
+interface BrandPalette {
+    main: string;
+    soft: string;
+}
+
 declare module "@mui/material/styles" {
     interface Palette {
         themeIcon: ThemeIconPalette;
+        brand: BrandPalette;
     }
 
     interface PaletteOptions {
         themeIcon?: ThemeIconPalette;
+        brand?: BrandPalette;
     }
 
     interface CssThemeVariables {
@@ -30,6 +37,10 @@ export const theme = createTheme({
                 themeIcon: {
                     main: "#0a6f88",
                     hover: "rgba(10, 111, 136, 0.12)"
+                },
+                brand: {
+                    main: "#6a54b0",
+                    soft: "rgba(106, 84, 176, 0.32)"
                 }
             }
         },
@@ -39,6 +50,10 @@ export const theme = createTheme({
                 themeIcon: {
                     main: "#fbbf24",
                     hover: "rgba(251, 191, 36, 0.12)"
+                },
+                brand: {
+                    main: "#a794e8",
+                    soft: "rgba(167, 148, 232, 0.32)"
                 }
             }
         }
