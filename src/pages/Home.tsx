@@ -16,7 +16,7 @@ const ROLE = "Software engineer";
 
 const ABOUT = "I build web applications end to end, from the interface down to the database. My "
     + "background is in computer science, scientific computing, and data analysis. Below are a few "
-    + "interactive projects that are easier to follow by watching them run than by reading about them, "
+    + "interactive projects that are easier to follow by watching them run than by reading boring code, "
     + "the rest of what I build is on GitHub.";
 
 const TECHNOLOGIES = ["TypeScript", "React", "Angular", "C#", ".NET", "Azure", "SQL", "Python"];
