@@ -105,6 +105,22 @@ describe("Intro", () => {
         expect(document.body).not.toHaveAttribute("inert");
     });
 
+    it("holds the page still while the name is being typed", () => {
+        show("typing");
+        expect(document.body).toHaveStyle({ overflow: "hidden" });
+    });
+
+    it("holds the page still while the name is in flight, so it lands where it was aimed", () => {
+        show("settling");
+        expect(document.body).toHaveStyle({ overflow: "hidden" });
+    });
+
+    it("lets the page scroll again when it goes", () => {
+        const { unmount } = show("settling");
+        unmount();
+        expect(document.body).not.toHaveStyle({ overflow: "hidden" });
+    });
+
     it("says when the name has landed", () => {
         const onLanded = vi.fn();
         const { container } = show("settling", { onLanded });

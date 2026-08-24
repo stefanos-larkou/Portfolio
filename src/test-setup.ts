@@ -24,6 +24,7 @@ class ResizeObserverStub {
 
 globalThis.matchMedia = query => new MediaQueryListStub(query);
 globalThis.ResizeObserver = ResizeObserverStub;
+globalThis.scrollTo = () => { };
 
 HTMLCanvasElement.prototype.getContext = () => null;
 

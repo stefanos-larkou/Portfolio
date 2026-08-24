@@ -39,6 +39,13 @@ export function Intro({ name, stage, lands, onTyped, onLanded }: IntroProps) {
     }, [stage]);
 
     useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.removeProperty("overflow");
+        };
+    }, []);
+
+    useEffect(() => {
         if (!typed || stage !== "typing") return;
 
         const timer = setTimeout(onTyped, HOLD_MS);
