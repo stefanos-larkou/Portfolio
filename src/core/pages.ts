@@ -49,3 +49,33 @@ export const PAGES: Page[] = [
         icon: "/random-walks.svg"
     }
 ];
+
+export interface Project {
+    heading: string;
+    blurb: string;
+    preview?: LazyExoticComponent<ComponentType>;
+    image?: string;
+    accent?: string;
+    path?: string;
+    url?: string;
+}
+
+const ROUTED: Project[] = PAGES.flatMap(page => page.heading && page.blurb
+    ? [{ heading: page.heading, blurb: page.blurb, preview: page.preview, accent: page.accent, path: page.path }]
+    : []);
+
+export const DINOPEDIA_URL = "https://dinopedia.io";
+
+export const PROJECTS: Project[] = [
+    ...ROUTED,
+    {
+        heading: "Dinopedia",
+        blurb: "A dinosaur encyclopaedia and a daily guessing game, built end to end: an Angular front "
+            + "end, an ASP.NET Core API and an SQL database, all running on Azure. Browse and filter the "
+            + "catalogue, watch Pangaea break apart on an interactive palaeo globe of the Mesozoic, or "
+            + "try to name the day's mystery dinosaur.",
+        url: DINOPEDIA_URL,
+        accent: "linear-gradient(135deg, #0b1633, #2a3c63)",
+        image: "/dinopedia-logo.svg"
+    }
+];

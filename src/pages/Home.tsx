@@ -5,18 +5,16 @@ import { ContactLinks } from "../components/ContactLinks";
 import { HomeBackdrop } from "../components/HomeBackdrop";
 import { Intro, SETTLE_MS } from "../components/Intro";
 import type { Stage } from "../components/Intro";
-import { PAGES } from "../core/pages";
-import type { Page } from "../core/pages";
+import { PROJECTS } from "../core/pages";
+import type { Project } from "../core/pages";
 import { STILL } from "../core/preview";
 import { glass } from "../core/surfaces";
-
-const PROJECTS = PAGES.filter(page => page.heading);
 
 const NAME = "Stefanos Larkou";
 const ROLE = "Software engineer";
 
 const ABOUT = "I build web applications end to end, from the interface down to the database. My "
-    + "background is in computer science, scientific computing, and data analysis. Below are a few "
+    + "background is in computer science and data analysis. Below are a few "
     + "interactive projects that are easier to follow by watching them run than by reading boring code, "
     + "the rest of what I build is on GitHub.";
 
@@ -99,7 +97,7 @@ export default function Home() {
                     <Container maxWidth="md" sx={{ py: { xs: 5, md: 7 } }}>
                         <Stack spacing={4}>
                             <Typography variant="h2">Projects</Typography>
-                            {PROJECTS.map(project => <Project key={project.path} project={project} />)}
+                            {PROJECTS.map(project => <ProjectCard key={project.path ?? project.url} project={project} />)}
                         </Stack>
                     </Container>
                 </Box>
@@ -108,14 +106,17 @@ export default function Home() {
     );
 }
 
-function Project({ project }: { project: Page; }) {
+function ProjectCard({ project }: { project: Project; }) {
     const Preview = project.preview;
+    const away = project.url !== undefined;
+    const destination = away
+        ? { component: "a" as const, href: project.url, target: "_blank", rel: "noopener noreferrer" }
+        : { component: RouterLink, to: project.path };
 
     return (
         <Box
-            component={RouterLink}
-            to={project.path}
-            aria-label={project.heading}
+            {...destination}
+            aria-label={away ? `${project.heading} (opens in a new tab)` : project.heading}
             sx={theme => ({
                 display: "grid",
                 gap: { xs: 2, sm: 3 },
@@ -144,9 +145,22 @@ function Project({ project }: { project: Page; }) {
                     "& canvas": { maxWidth: "100%", maxHeight: "100%" }
                 })}
             >
-                <Suspense fallback={null}>
-                    {Preview && <Preview />}
-                </Suspense>
+                {project.image
+                    ? (
+                        <Box
+                            component="img"
+                            src={project.image}
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            sx={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain", alignSelf: "center", p: 2 }}
+                        />
+                    )
+                    : (
+                        <Suspense fallback={null}>
+                            {Preview && <Preview />}
+                        </Suspense>
+                    )}
             </Box>
 
             <Stack spacing={1}>
